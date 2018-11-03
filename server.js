@@ -23,9 +23,22 @@ app.get('/',(req,res)=>{
     // mylists.name = "Palllo"
     // mylists.save();
 })
-app.get('/api/save',(req,res)=>{
-    console.log(req.body.title);
+app.post('/api/save',(req,res,next)=>{
+    let list = new List();
+    list.title = req.body.title;
+
+    list.save((err) => {
+        if(err) return next(err);
+        console.log("List item has been saved")
+    });
 });
+
+app.get('/api/load',(req,res,next) => {
+    List.find({},(err,list) => {
+        if(err) return next(err);
+        res.json(list);
+    })
+})
 
 app.get('/addItem',(req,res)=>{
     var listItems = new ListItem();
